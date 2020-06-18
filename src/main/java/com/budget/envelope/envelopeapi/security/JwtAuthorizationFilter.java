@@ -44,7 +44,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         }
 
 
-        JwkProvider jwkProvider = new UrlJwkProvider("https://dev-bt615855.auth0.com/");
+        JwkProvider jwkProvider = new UrlJwkProvider(System.getenv("JWK_VERIFIER"));
         try {
             DecodedJWT decodedJwt = JWT.decode(authHeader.replace(BEARER_PREFIX, ""));
             Jwk jwk = jwkProvider.get(decodedJwt.getKeyId());
@@ -52,7 +52,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) jwk.getPublicKey(), null);
 
             JWTVerifier jwtVerifier = JWT.require(algorithm)
-                    .withIssuer("https://dev-bt615855.auth0.com/")
+                    .withIssuer(System.getenv("JWK_VERIFIER"))
                     .build();
             jwtVerifier.verify(decodedJwt);
 
