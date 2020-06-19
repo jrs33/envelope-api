@@ -17,7 +17,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-        if(System.getenv("IS_LOCAL").equals("true")) {
+        if("true".equals(System.getenv("IS_LOCAL"))) {
             httpSecurity.cors()
                     .configurationSource(corsConfigurationSource());
 

@@ -17,7 +17,7 @@ public class CoreConfiguration {
     @Bean
     public DataSource getDataSource() throws URISyntaxException {
 
-        if(System.getenv("IS_LOCAL").equals("true")) {
+        if("true".equals(System.getenv("IS_LOCAL"))) {
             DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
             dataSourceBuilder.driverClassName("org.postgresql.Driver");
             dataSourceBuilder.url("jdbc:postgresql://localhost:5432/envelope");

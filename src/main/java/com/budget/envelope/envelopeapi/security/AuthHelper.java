@@ -11,7 +11,7 @@ public final class AuthHelper {
 
     public static String getUserIdFromHeader(final String authValue) {
 
-        if(System.getenv("IS_LOCAL").equals("true")) {
+        if("true".equals(System.getenv("IS_LOCAL"))) {
             return "local_test_id";
         }
 
