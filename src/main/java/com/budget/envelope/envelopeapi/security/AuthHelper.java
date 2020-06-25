@@ -16,6 +16,8 @@ public final class AuthHelper {
         }
 
         DecodedJWT decodedJwt = JWT.decode(authValue.replace(BEARER_PREFIX, ""));
-        return decodedJwt.getClaims().get("sub").asString().split("\\|")[1];
+        String userId = decodedJwt.getClaims().get("sub").asString().split("\\|")[1];
+        System.out.println("user_id: " + userId);
+        return userId;
     }
 }
