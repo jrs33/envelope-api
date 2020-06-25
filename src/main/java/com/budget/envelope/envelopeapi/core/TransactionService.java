@@ -23,7 +23,7 @@ class TransactionService {
     List<Transaction> getTransactions(final String userId, final long start, final long limit) {
         return jdbcTemplate.query(
                 "SELECT * FROM transactions WHERE userId = ? LIMIT ? OFFSET ?",
-                new Object[] {userId, start, limit},
+                new Object[] {userId, limit, start},
                 (resultSet, rowNum) ->
                         new Transaction(
                                 resultSet.getLong("id"),

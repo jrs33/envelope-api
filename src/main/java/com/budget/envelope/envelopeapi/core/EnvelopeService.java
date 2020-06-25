@@ -20,7 +20,7 @@ class EnvelopeService {
     List<Envelope> getEnvelopes(final String userId, final long start, final long limit) {
         return jdbcTemplate.query(
                 "SELECT * FROM envelopes WHERE userId = ? LIMIT ? OFFSET ?",
-                new Object[] {userId, start, limit},
+                new Object[] {userId, limit, start},
                 (resultSet, rowNum) ->
                         new Envelope(
                                 resultSet.getLong("id"),
