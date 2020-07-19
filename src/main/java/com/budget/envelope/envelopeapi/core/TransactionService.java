@@ -53,7 +53,7 @@ class TransactionService {
         int numRowsUpdated = jdbcTemplate.update(
                 "INSERT INTO transactions(date, userId, envelopeId, amount, transactionName, transactionStrategy, sourceId) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?)",
-                LocalDate.now().toString(),
+                transaction.getDate(),
                 transaction.getUserId(),
                 transaction.getEnvelopeId(),
                 transaction.getAmount(),
