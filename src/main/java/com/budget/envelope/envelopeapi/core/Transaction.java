@@ -14,6 +14,7 @@ class Transaction {
     private final double amount;
     private final String transactionName;
     @JsonProperty("transactionType") private final TransactionStrategy transactionStrategy;
+    private final long sourceId;
 
     @JsonCreator
     Transaction(@JsonProperty("id") long id,
@@ -22,7 +23,8 @@ class Transaction {
                 @JsonProperty("envelopeId") long envelopeId,
                 @JsonProperty("amount") double amount,
                 @JsonProperty("transactionName") String transactionName,
-                @JsonProperty("transactionType") TransactionStrategy transactionStrategy) {
+                @JsonProperty("transactionType") TransactionStrategy transactionStrategy,
+                @JsonProperty("sourceId") long sourceId) {
         this.id = id;
         this.date = date;
         this.userId = userId;
@@ -30,6 +32,7 @@ class Transaction {
         this.amount = amount;
         this.transactionName = transactionName;
         this.transactionStrategy = transactionStrategy;
+        this.sourceId = sourceId;
     }
 
     public String getTransactionName() {
@@ -62,5 +65,9 @@ class Transaction {
 
     public long getId() {
         return id;
+    }
+
+    public long getSourceId() {
+        return sourceId;
     }
 }

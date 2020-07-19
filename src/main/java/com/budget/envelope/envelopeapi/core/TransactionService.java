@@ -13,11 +13,13 @@ class TransactionService {
 
     private final JdbcTemplate jdbcTemplate;
     private final EnvelopeService envelopeService;
+    private final SourceService sourceService;
 
     @Autowired
-    TransactionService(JdbcTemplate jdbcTemplate, EnvelopeService envelopeService) {
+    TransactionService(JdbcTemplate jdbcTemplate, EnvelopeService envelopeService, SourceService sourceService) {
         this.jdbcTemplate = jdbcTemplate;
         this.envelopeService = envelopeService;
+        this.sourceService = sourceService;
     }
 
     List<Transaction> getTransactions(final String userId, final long start, final long limit) {
@@ -32,7 +34,8 @@ class TransactionService {
                                 resultSet.getLong("envelopeId"),
                                 resultSet.getDouble("amount"),
                                 resultSet.getString("transactionName"),
-                                TransactionStrategy.from(resultSet.getString("transactionStrategy")))
+                                TransactionStrategy.from(resultSet.getString("transactionStrategy")),
+                                resultSet.getLong("sourceId"))
         );
     }
 
@@ -42,16 +45,21 @@ class TransactionService {
         if(!envelope.isPresent()) {
             throw new TransactionException("no_matching_envelope");
         }
+        Optional<Source> source = sourceService.findSource(transaction.getUserId(), transaction.getSourceId());
+        if(!source.isPresent()) {
+            throw new TransactionException("no_matching_source");
+        }
 
         int numRowsUpdated = jdbcTemplate.update(
-                "INSERT INTO transactions(date, userId, envelopeId, amount, transactionName, transactionStrategy) " +
-                        "VALUES (?, ?, ?, ?, ?, ?)",
+                "INSERT INTO transactions(date, userId, envelopeId, amount, transactionName, transactionStrategy, sourceId) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?)",
                 LocalDate.now().toString(),
                 transaction.getUserId(),
                 transaction.getEnvelopeId(),
                 transaction.getAmount(),
                 transaction.getTransactionName(),
-                transaction.getTransactionStrategy().name()
+                transaction.getTransactionStrategy().name(),
+                transaction.getSourceId()
         );
         if(numRowsUpdated != 1) {
             throw new TransactionException("error_saving_transaction");
