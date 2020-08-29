@@ -22,6 +22,7 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
+    @Deprecated
     @GetMapping(path = "/transactions")
     public List<Transaction> getTransactions(
             @RequestHeader(name = "Authorization", required = true) String token,
@@ -31,6 +32,28 @@ public class TransactionController {
         return transactionService.getTransactions(userId, from, 10);
     }
 
+    @GetMapping(path = "/transactions/date/all")
+    public List<TransactionTarget> getTransactionsAll(
+            @RequestHeader(name = "Authorization", required = true) String token,
+            @RequestParam(value = "month") long month,
+            @RequestParam(value = "year") long year
+    ) throws TransactionException {
+        String userId = AuthHelper.getUserIdFromHeader(token);
+        return transactionService.getTransactionsAll(userId, month, year);
+    }
+
+    @GetMapping(path = "/transactions/date/paginated")
+    public List<TransactionTarget> getTransactionsPaginated(
+            @RequestHeader(name = "Authorization", required = true) String token,
+            @RequestParam(value = "month") long month,
+            @RequestParam(value = "year") long year,
+            @RequestParam(value = "from") long from
+    ) throws TransactionException {
+        String userId = AuthHelper.getUserIdFromHeader(token);
+        return transactionService.getTransactionsPaginated(userId, month, year, from, 10);
+    }
+
+    @Deprecated
     @PostMapping(path = "/transaction/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Transaction postTransaction(
             @RequestHeader(name = "Authorization", required = true) String token,
@@ -39,5 +62,16 @@ public class TransactionController {
         String userId = AuthHelper.getUserIdFromHeader(token);
         transaction.setUserId(userId);
         return transactionService.recordTransaction(transaction);
+    }
+
+    @Deprecated
+    @PostMapping(path = "/transaction/create/v2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public TransactionTarget postTransaction(
+            @RequestHeader(name = "Authorization", required = true) String token,
+            @RequestBody TransactionTarget transaction
+    ) throws TransactionException {
+        String userId = AuthHelper.getUserIdFromHeader(token);
+        transaction.setUserId(userId);
+        return transactionService.recordTransactionTarget(transaction);
     }
 }

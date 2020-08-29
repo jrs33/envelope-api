@@ -28,7 +28,12 @@ enum TransactionStrategy {
         return strategy;
     }
 
+    @Deprecated
     public Double apply(Envelope envelope, Transaction transaction) {
+        return getStrategy().apply(envelope.getSpentMoney(), transaction.getAmount());
+    }
+
+    public Double applyTarget(Envelope envelope, TransactionTarget transaction) {
         return getStrategy().apply(envelope.getSpentMoney(), transaction.getAmount());
     }
 
