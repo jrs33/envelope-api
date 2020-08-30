@@ -88,6 +88,30 @@ class TransactionService {
         );
     }
 
+    List<TransactionTarget> getTransactionsForDay(
+            final String userId,
+            final long month,
+            final long year,
+            final long day
+    ) {
+        return jdbcTemplate.query(
+                "SELECT * FROM transactions2 WHERE userId = ? AND month = ? AND year = ? AND day = ?",
+                new Object[] {userId, month, year, day},
+                (resultSet, rowNum) ->
+                        new TransactionTarget(
+                                resultSet.getLong("id"),
+                                resultSet.getLong("year"),
+                                resultSet.getLong("month"),
+                                resultSet.getLong("day"),
+                                resultSet.getString("userId"),
+                                resultSet.getLong("envelopeId"),
+                                resultSet.getDouble("amount"),
+                                resultSet.getString("transactionName"),
+                                TransactionStrategy.from(resultSet.getString("transactionStrategy")),
+                                resultSet.getLong("sourceId"))
+        );
+    }
+
     @Deprecated
     Transaction recordTransaction(Transaction transaction) throws TransactionException {
 

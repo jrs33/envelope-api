@@ -42,7 +42,7 @@ public class TransactionController {
         return transactionService.getTransactionsAll(userId, month, year);
     }
 
-    @GetMapping(path = "/transactions/date/paginated")
+    @GetMapping(path = "/transactions/month/paginated")
     public List<TransactionTarget> getTransactionsPaginated(
             @RequestHeader(name = "Authorization", required = true) String token,
             @RequestParam(value = "month") long month,
@@ -51,6 +51,17 @@ public class TransactionController {
     ) throws TransactionException {
         String userId = AuthHelper.getUserIdFromHeader(token);
         return transactionService.getTransactionsPaginated(userId, month, year, from, 10);
+    }
+
+    @GetMapping(path = "/transactions/day")
+    public List<TransactionTarget> getTransactionsForDay(
+            @RequestHeader(name = "Authorization", required = true) String token,
+            @RequestParam(value = "month") long month,
+            @RequestParam(value = "year") long year,
+            @RequestParam(value = "day") long day
+    ) throws TransactionException {
+        String userId = AuthHelper.getUserIdFromHeader(token);
+        return transactionService.getTransactionsForDay(userId, month, year, day);
     }
 
     @Deprecated
