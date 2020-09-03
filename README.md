@@ -1,3 +1,3 @@
 # envelope-api
 
-[![Actions Status](https://github.com/jrs33/envelope-api/workflows/Java%20CI%20with%20Maven/badge.svg)]
+![Actions Status](https://github.com/jrs33/envelope-api/workflows/Java%20CI%20with%20Maven/badge.svg)
