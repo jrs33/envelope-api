@@ -8,4 +8,4 @@ FROM openjdk:8-jdk-alpine
 COPY --from=builder /usr/src/app/target/envelope-api-0.0.1-SNAPSHOT.jar /app.jar
 RUN adduser -D myuser
 USER myuser
-ENTRYPOINT ["java","-jar","-Dserver.port=${PORT:8080}","/app.jar"]
+CMD java -jar -Dserver.port=$PORT /app.jar
