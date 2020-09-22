@@ -15,9 +15,6 @@ import java.util.Optional;
 @RestController
 public class EnvelopeController {
 
-    // TODO: need auth
-    static final long HARD_CODED_USER_ID = 1L;
-
     private final EnvelopeService envelopeService;
 
     public EnvelopeController(EnvelopeService envelopeService) {
