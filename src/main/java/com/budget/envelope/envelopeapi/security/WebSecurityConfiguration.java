@@ -17,17 +17,23 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity
-                .authorizeRequests()
+        if("true".equals(System.getenv("IS_LOCAL"))) {
+            httpSecurity.cors()
+                    .configurationSource(corsConfigurationSource());
+            httpSecurity.csrf().disable();
+        } else {
+            httpSecurity
+                    .authorizeRequests()
                     .antMatchers(HttpMethod.OPTIONS, "/*").permitAll()
                     .anyRequest().authenticated()
-                .and()
-                .addFilter(new JwtAuthorizationFilter(authenticationManager()));
+                    .and()
+                    .addFilter(new JwtAuthorizationFilter(authenticationManager()));
 
-        httpSecurity.cors()
-                .configurationSource(corsConfigurationSource());
+            httpSecurity.cors()
+                    .configurationSource(corsConfigurationSource());
 
-        httpSecurity.csrf().disable();
+            httpSecurity.csrf().disable();
+        }
     }
 
     @Bean

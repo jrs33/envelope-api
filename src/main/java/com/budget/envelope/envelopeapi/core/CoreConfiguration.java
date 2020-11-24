@@ -17,6 +17,16 @@ public class CoreConfiguration {
     @Bean
     public DataSource getDataSource() throws URISyntaxException {
 
+        if("true".equals(System.getenv("IS_LOCAL"))) {
+            DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+            dataSourceBuilder.driverClassName("org.postgresql.Driver");
+            dataSourceBuilder.url("jdbc:postgresql://host.docker.internal:5432/envelope");
+            dataSourceBuilder.password("");
+            dataSourceBuilder.username("joshsurette");
+
+            return dataSourceBuilder.build();
+        }
+
         URI dbUri = new URI(System.getenv("DATABASE_URL"));
 
         String username = dbUri.getUserInfo().split(":")[0];
