@@ -20,7 +20,7 @@ public class CoreConfiguration {
         if("true".equals(System.getenv("IS_LOCAL"))) {
             DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
             dataSourceBuilder.driverClassName("org.postgresql.Driver");
-            dataSourceBuilder.url("jdbc:postgresql://host.docker.internal:5432/envelope");
+            dataSourceBuilder.url("jdbc:postgresql://" + System.getenv("DATABASE_URL") + ":" + System.getenv("DATABASE_PORT") + "/envelope");
             dataSourceBuilder.password("");
             dataSourceBuilder.username("joshsurette");
 

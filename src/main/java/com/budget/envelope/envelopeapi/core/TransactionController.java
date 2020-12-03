@@ -75,7 +75,6 @@ public class TransactionController {
         return transactionService.recordTransaction(transaction);
     }
 
-    @Deprecated
     @PostMapping(path = "/transaction/create/v2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public TransactionTarget postTransaction(
             @RequestHeader(name = "Authorization", required = true) String token,
