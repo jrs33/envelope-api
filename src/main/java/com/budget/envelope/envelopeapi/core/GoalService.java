@@ -5,15 +5,35 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
-public class GoalService {
+class GoalService {
 
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     GoalService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    Optional<Goal> getGoal(String userId, long id) {
+        List<Goal> queryResult = jdbcTemplate.query(
+                "SELECT * from goals WHERE userId = ? AND id = ?",
+                new Object[] {userId, id},
+                (resultSet, rowNum) ->
+                        new Goal(
+                                resultSet.getLong("id"),
+                                resultSet.getString("userId"),
+                                resultSet.getString("name"),
+                                resultSet.getDouble("goalAmount"),
+                                resultSet.getDouble("goalProgress")
+                        )
+        );
+
+        return queryResult.size() != 1 ?
+                Optional.empty() :
+                Optional.of(queryResult.get(0));
     }
 
     List<Goal> getGoals(String userId, final long start, final long limit) {
@@ -35,13 +55,13 @@ public class GoalService {
         return jdbcTemplate.update(
                 "INSERT INTO goals (name, userId, goalAmount, goalProgress) VALUES (?, ?, ?, ?)",
                 goal.getName(),
-                goal.getUserId(),
+                userId,
                 goal.getGoalAmount(),
                 goal.getGoalProgress()
         );
     }
 
-    int updateGoalProgress(final int goalId, final String userId, final double goalProgress) {
+    int updateGoalProgress(final long goalId, final String userId, final double goalProgress) {
         return jdbcTemplate.update(
                 "UPDATE goals SET goalProgress = ? WHERE id = ? AND userId = ?",
                 goalProgress,
